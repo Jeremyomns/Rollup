@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Rollup — ma ludothèque</title>
+  <meta name="description" content="Rollup : catalogue personnel de jeux de société. Filtre ta collection et laisse le hasard choisir la partie du soir.">
+  <meta name="theme-color" content="#4F46E5">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/favicon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#app">Aller au contenu principal</a>
+
+  <!-- ======================= En-tête ======================= -->
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a class="brand" href="#/" aria-label="Rollup, retour à l'accueil">
+        <span class="brand__logo" aria-hidden="true">
+          <svg viewBox="0 0 48 48" width="32" height="32" role="presentation">
+            <rect x="4" y="4" width="40" height="40" rx="11" fill="url(#g)"/>
+            <circle cx="17" cy="17" r="4" fill="#fff"/>
+            <circle cx="31" cy="31" r="4" fill="#fff"/>
+            <circle cx="24" cy="24" r="4" fill="#fff" opacity=".65"/>
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#4F46E5"/>
+                <stop offset="1" stop-color="#FF6B5B"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+        <span class="brand__text">
+          <strong>Rollup</strong>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="Navigation principale">
+        <a class="nav__link" href="#/" data-route="/">Accueil</a>
+        <a class="nav__link" href="#/bibliotheque" data-route="/bibliotheque">Ma bibliothèque</a>
+        <a class="nav__link" href="#/ajouter" data-route="/ajouter">Ajouter un jeu</a>
+        <a class="nav__link" href="#/parametres" data-route="/parametres">Paramètres</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ======================= Contenu (rendu par le routeur) ======================= -->
+  <main id="app" class="app-main" tabindex="-1"></main>
+
+  <!-- ======================= Barre de navigation mobile ======================= -->
+  <nav class="tabbar" aria-label="Navigation mobile">
+    <a class="tabbar__link" href="#/" data-route="/">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4l8 7.2V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>
+      <span>Accueil</span>
+    </a>
+    <a class="tabbar__link" href="#/bibliotheque" data-route="/bibliotheque">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v7H4zm0 9h6v7H4zm8-9h8v4h-8zm0 6h8v10h-8z"/></svg>
+      <span>Bibliothèque</span>
+    </a>
+    <a class="tabbar__link tabbar__link--cta" href="#/ajouter" data-route="/ajouter">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
+      <span>Ajouter</span>
+    </a>
+    <a class="tabbar__link" href="#/parametres" data-route="/parametres">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8m8.4 4a8.4 8.4 0 0 1-.1 1.2l2 1.6-1.9 3.3-2.4-1a8.5 8.5 0 0 1-2 1.2l-.4 2.6h-3.8l-.4-2.6a8.5 8.5 0 0 1-2-1.2l-2.4 1L3.7 14.8l2-1.6A8.4 8.4 0 0 1 5.6 12c0-.4 0-.8.1-1.2l-2-1.6 1.9-3.3 2.4 1a8.5 8.5 0 0 1 2-1.2l.4-2.6h3.8l.4 2.6a8.5 8.5 0 0 1 2 1.2l2.4-1 1.9 3.3-2 1.6c.1.4.1.8.1 1.2"/></svg>
+      <span>Réglages</span>
+    </a>
+  </nav>
+
+  <!-- ======================= Zones utilitaires ======================= -->
+  <div id="toast-zone" class="toast-zone" role="status" aria-live="polite"></div>
+  <div id="modal-root"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

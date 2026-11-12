@@ -1,0 +1,626 @@
+/* =============================================================
+   Rollup — feuille de style unique
+   Palette « Pop & ludique » : indigo vif + corail sur blanc bleuté.
+   Organisation : variables → base → layout → composants → pages → responsive
+   ============================================================= */
+
+/* ---------- 1. Variables de design ---------- */
+:root {
+  /* Couleurs de fond et de texte */
+  --bg: #F7F8FC;
+  --surface: #FFFFFF;
+  --surface-2: #F1F2FA;
+  --text: #171A2B;
+  --text-soft: #5A5F7A;
+  --text-faint: #8C91AC;
+  --border: #E4E6F2;
+
+  /* Couleurs d'action */
+  --primary: #4F46E5;
+  --primary-dark: #3B33C4;
+  --primary-soft: #EEEDFE;
+  --accent: #FF6B5B;
+  --accent-dark: #E8543F;
+  --accent-soft: #FFEDEA;
+  --danger: #DC2E4E;
+  --danger-soft: #FDECEF;
+  --success: #0E9F6E;
+
+  /* Badges par catégorie (pastilles) */
+  --cat-strategie-bg: #EEEDFE;   --cat-strategie-fg: #3B33C4;
+  --cat-cooperation-bg: #E3F7EF; --cat-cooperation-fg: #07794F;
+  --cat-ambiance-bg: #FFF3D6;    --cat-ambiance-fg: #8A5A00;
+  --cat-reflexion-bg: #E6F1FF;   --cat-reflexion-fg: #1356A8;
+  --cat-familial-bg: #FFE9F3;    --cat-familial-fg: #A8215F;
+  --cat-cartes-bg: #E8F8F5;      --cat-cartes-fg: #0A6E62;
+  --cat-autres-bg: #ECEDF3;      --cat-autres-fg: #4A4F66;
+
+  /* Rayons, ombres, transitions */
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --shadow-sm: 0 1px 2px rgba(23, 26, 43, .06), 0 1px 3px rgba(23, 26, 43, .05);
+  --shadow: 0 4px 14px rgba(23, 26, 43, .08);
+  --shadow-lg: 0 18px 40px -12px rgba(79, 70, 229, .32);
+  --ring: 0 0 0 3px rgba(79, 70, 229, .35);
+  --t: 160ms cubic-bezier(.4, 0, .2, 1);
+
+  --header-h: 64px;
+  --tabbar-h: 62px;
+  --maxw: 1180px;
+}
+
+/* ---------- 2. Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { margin: 0 0 .4em; line-height: 1.2; letter-spacing: -.02em; }
+h1 { font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem); }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.05rem; }
+p  { margin: 0 0 1em; }
+a  { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; display: block; }
+
+:focus-visible { outline: none; box-shadow: var(--ring); border-radius: 6px; }
+
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 100;
+  background: var(--primary); color: #fff; padding: .6rem 1rem; border-radius: 0 0 var(--radius-sm) 0;
+}
+.skip-link:focus { left: 0; }
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- 3. En-tête et navigation ---------- */
+.app-header {
+  position: sticky; top: 0; z-index: 30;
+  height: var(--header-h);
+  background: rgba(255, 255, 255, .88);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.app-header__inner {
+  max-width: var(--maxw); height: 100%; margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+
+.brand { display: flex; align-items: center; gap: .65rem; color: inherit; }
+.brand:hover { text-decoration: none; }
+.brand__logo { display: grid; place-items: center; }
+.brand__text { display: flex; align-items: center; line-height: 1.05; }
+.brand__text strong { font-size: 1.3rem; letter-spacing: -.03em; }
+
+.nav { display: flex; gap: .25rem; }
+.nav__link {
+  padding: .5rem .85rem; border-radius: 999px;
+  color: var(--text-soft); font-size: .92rem; font-weight: 500;
+  transition: background var(--t), color var(--t);
+}
+.nav__link:hover { background: var(--surface-2); color: var(--text); text-decoration: none; }
+.nav__link.is-active { background: var(--primary-soft); color: var(--primary-dark); font-weight: 600; }
+
+.app-main {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: clamp(1.25rem, 3vw, 2.25rem) clamp(1rem, 3vw, 2rem) calc(var(--tabbar-h) + 2.5rem);
+}
+
+/* Barre d'onglets mobile (masquée sur grand écran) */
+.tabbar {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+  height: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: rgba(255, 255, 255, .95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border);
+}
+.tabbar__link {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  color: var(--text-faint); font-size: .68rem; font-weight: 600;
+}
+.tabbar__link:hover { text-decoration: none; }
+.tabbar__link svg { width: 22px; height: 22px; fill: currentColor; }
+.tabbar__link.is-active { color: var(--primary); }
+.tabbar__link--cta svg {
+  width: 34px; height: 34px; padding: 6px; border-radius: 50%;
+  background: var(--accent); color: #fff; fill: #fff;
+}
+
+/* ---------- 4. Éléments de formulaire et boutons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .62rem 1.1rem; border: 1px solid transparent; border-radius: 999px;
+  background: var(--surface); color: var(--text);
+  font: inherit; font-size: .93rem; font-weight: 600; cursor: pointer;
+  transition: transform var(--t), background var(--t), box-shadow var(--t), border-color var(--t);
+}
+.btn:hover { text-decoration: none; }
+.btn:active { transform: translateY(1px); }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+.btn--primary { background: var(--primary); color: #fff; }
+.btn--primary:hover { background: var(--primary-dark); }
+.btn--accent { background: var(--accent); color: #fff; }
+.btn--accent:hover { background: var(--accent-dark); }
+.btn--ghost { background: transparent; border-color: var(--border); color: var(--text-soft); }
+.btn--ghost:hover { background: var(--surface-2); color: var(--text); }
+.btn--danger { background: var(--danger-soft); color: var(--danger); }
+.btn--danger:hover { background: #FBD9E0; }
+.btn--block { width: 100%; }
+.btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+.field { margin-bottom: 1.1rem; }
+.field > label, .field__legend {
+  display: block; margin-bottom: .35rem;
+  font-size: .85rem; font-weight: 600; color: var(--text-soft);
+}
+.field__hint { margin: .3rem 0 0; font-size: .78rem; color: var(--text-faint); }
+.field__error { margin: .3rem 0 0; font-size: .8rem; font-weight: 500; color: var(--danger); }
+
+input[type="text"], input[type="number"], input[type="url"], input[type="search"], select, textarea {
+  width: 100%; padding: .6rem .8rem;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text);
+  font: inherit; font-size: .95rem;
+  transition: border-color var(--t), box-shadow var(--t);
+}
+input:hover, select:hover, textarea:hover { border-color: #CFD2E6; }
+input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: var(--ring); outline: none; }
+textarea { min-height: 110px; resize: vertical; }
+.is-invalid { border-color: var(--danger) !important; }
+
+fieldset { margin: 0 0 1.1rem; padding: 0; border: 0; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+
+/* Interrupteur oui/non */
+.switch { display: flex; align-items: center; gap: .7rem; cursor: pointer; }
+.switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+.switch__track {
+  flex: none; width: 46px; height: 26px; border-radius: 999px;
+  background: #D6D9EA; position: relative; transition: background var(--t);
+}
+.switch__track::after {
+  content: ""; position: absolute; top: 3px; left: 3px;
+  width: 20px; height: 20px; border-radius: 50%; background: #fff;
+  box-shadow: var(--shadow-sm); transition: transform var(--t);
+}
+.switch input:checked + .switch__track { background: var(--primary); }
+.switch input:checked + .switch__track::after { transform: translateX(20px); }
+.switch input:focus-visible + .switch__track { box-shadow: var(--ring); }
+.switch__label { font-size: .93rem; font-weight: 500; }
+
+/* Groupe de puces (filtres, choix multiples) */
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.chip { position: relative; }
+.chip input { position: absolute; opacity: 0; width: 0; height: 0; }
+.chip__label {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .36rem .78rem; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface); color: var(--text-soft);
+  font-size: .85rem; font-weight: 600; cursor: pointer; user-select: none;
+  transition: background var(--t), color var(--t), border-color var(--t);
+}
+.chip__label:hover { background: var(--surface-2); color: var(--text); }
+.chip input:checked + .chip__label {
+  background: var(--primary); border-color: var(--primary); color: #fff;
+}
+.chip input:focus-visible + .chip__label { box-shadow: var(--ring); }
+/* Variante bouton (filtres à sélection unique : joueurs, statut joué) */
+button.chip__label { font: inherit; font-size: .85rem; font-weight: 600; }
+.chip__label.is-on { background: var(--primary); border-color: var(--primary); color: #fff; }
+.chip__label.is-on:hover { background: var(--primary-dark); color: #fff; }
+.switch__label svg { width: 15px; height: 15px; fill: var(--accent); vertical-align: -2px; }
+
+/* ---------- 5. Cartes, badges, blocs ---------- */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow-sm);
+}
+
+.panel {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);
+  padding: clamp(1rem, 2.2vw, 1.5rem);
+  margin-bottom: 1.25rem;
+}
+.panel__head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;
+}
+.panel__title { margin: 0; font-size: 1.05rem; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: .28rem;
+  padding: .2rem .55rem; border-radius: 999px;
+  background: var(--surface-2); color: var(--text-soft);
+  font-size: .74rem; font-weight: 700; letter-spacing: .01em; white-space: nowrap;
+}
+.badge svg { width: 13px; height: 13px; fill: currentColor; }
+.badge--strategie  { background: var(--cat-strategie-bg);  color: var(--cat-strategie-fg); }
+.badge--cooperation{ background: var(--cat-cooperation-bg);color: var(--cat-cooperation-fg); }
+.badge--ambiance   { background: var(--cat-ambiance-bg);   color: var(--cat-ambiance-fg); }
+.badge--reflexion  { background: var(--cat-reflexion-bg);  color: var(--cat-reflexion-fg); }
+.badge--familial   { background: var(--cat-familial-bg);   color: var(--cat-familial-fg); }
+.badge--cartes     { background: var(--cat-cartes-bg);     color: var(--cat-cartes-fg); }
+.badge--autres     { background: var(--cat-autres-bg);     color: var(--cat-autres-fg); }
+.badge--accent     { background: var(--accent-soft); color: var(--accent-dark); }
+.badge--outline    { background: transparent; border: 1px solid var(--border); }
+
+/* ---------- 6. Accueil ---------- */
+.hero {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius-lg);
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  margin-bottom: 1.25rem;
+  background: linear-gradient(135deg, #4F46E5 0%, #6D5BF0 55%, #FF6B5B 140%);
+  color: #fff;
+  box-shadow: var(--shadow-lg);
+}
+.hero h1 { color: #fff; margin-bottom: .3rem; }
+.hero p { margin: 0; color: rgba(255, 255, 255, .86); max-width: 48ch; }
+.hero__stats { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.2rem; }
+.hero__stat {
+  background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: var(--radius); padding: .6rem .95rem; backdrop-filter: blur(4px);
+}
+.hero__stat b { display: block; font-size: 1.5rem; line-height: 1.1; }
+.hero__stat span { font-size: .78rem; color: rgba(255, 255, 255, .85); }
+
+.draw-zone { text-align: center; padding-block: .5rem 1rem; }
+.btn-draw {
+  display: inline-flex; align-items: center; gap: .7rem;
+  padding: 1rem 2.1rem; border: 0; border-radius: 999px;
+  background: var(--accent); color: #fff;
+  font: inherit; font-size: 1.1rem; font-weight: 700; cursor: pointer;
+  box-shadow: 0 14px 30px -10px rgba(255, 107, 91, .75);
+  transition: transform var(--t), box-shadow var(--t), background var(--t);
+}
+.btn-draw:hover { background: var(--accent-dark); transform: translateY(-2px); }
+.btn-draw:active { transform: translateY(0); }
+.btn-draw[disabled] { background: #C9CCDD; box-shadow: none; cursor: not-allowed; transform: none; }
+.btn-draw svg { width: 26px; height: 26px; fill: currentColor; }
+
+/* ---------- Lancer de dé (animation du tirage) ---------- */
+/* --roll est injecté par le JS : c'est la durée du jet.
+   --from / --from-b : d'où les dés arrivent (à gauche, hors de la zone). */
+.dice-stage {
+  --roll: 2500ms;
+  --from: -210px;
+  --from-b: -265px;
+  display: grid; place-items: center; gap: .9rem;
+  padding: 1.2rem 0 .4rem;
+}
+
+/* La « table » : un halo discret qui donne un sol aux dés
+   et évite l'impression de grand rectangle blanc vide. */
+.dice-stage__board {
+  position: relative;
+  width: 100%; max-width: 460px; height: 122px;
+  perspective: 820px;
+  display: flex; align-items: flex-end; justify-content: center; gap: 26px;
+  padding-bottom: 10px;
+  background:
+    radial-gradient(60% 52% at 50% 92%, rgba(79, 70, 229, .13), rgba(79, 70, 229, 0) 72%),
+    radial-gradient(38% 30% at 50% 96%, rgba(255, 107, 91, .10), rgba(255, 107, 91, 0) 70%);
+}
+
+/* Un emplacement = un dé + son ombre. Le déplacement horizontal
+   (le lancer à proprement parler) s'applique ici : l'ombre suit le dé
+   au sol, tandis que les rebonds n'affectent que le cube. */
+.dice-slot {
+  display: grid; justify-items: center; gap: 10px;
+  animation: dice-throw var(--roll) cubic-bezier(.11, .72, .22, 1) both;
+}
+.dice-slot--b { animation-name: dice-throw-b; }
+
+.dice {
+  position: relative; width: 66px; height: 66px;
+  transform-style: preserve-3d;
+  /* Rotation + rebonds. Le ralentissement est encodé dans l'espacement
+     des images clés : les tours sont de moins en moins amples. */
+  animation: dice-spin var(--roll) linear both;
+}
+.dice--b { width: 58px; height: 58px; animation-name: dice-spin-b; }
+
+.dice__face {
+  position: absolute; inset: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+  padding: 9px; border-radius: 14px;
+  /* Dé indigo à points blancs : lisible sur le fond clair des panneaux. */
+  background: linear-gradient(150deg, #6D5BF0 0%, #4F46E5 55%, #3B33C4 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28), 0 10px 24px -8px rgba(59, 51, 196, .55);
+  backface-visibility: visible;
+}
+/* --half = la moitié de l'arête : c'est ce qui place chaque face sur le cube. */
+.dice           { --half: 33px; --pip: 11px; }
+.dice--b        { --half: 29px; --pip: 10px; }
+.dice__face--front  { transform: translateZ(var(--half)); }
+.dice__face--back   { transform: rotateY(180deg) translateZ(var(--half)); }
+.dice__face--right  { transform: rotateY(90deg)  translateZ(var(--half)); }
+.dice__face--left   { transform: rotateY(-90deg) translateZ(var(--half)); }
+.dice__face--top    { transform: rotateX(90deg)  translateZ(var(--half)); }
+.dice__face--bottom { transform: rotateX(-90deg) translateZ(var(--half)); }
+
+.dice__pip {
+  width: var(--pip); height: var(--pip); border-radius: 50%;
+  align-self: center; justify-self: center;
+  background: radial-gradient(circle at 34% 30%, #FFFFFF, #DBD9FB 75%);
+  box-shadow: 0 1px 2px rgba(23, 26, 43, .35);
+}
+/* Un point en corail : clin d'œil à la palette pendant la rotation. */
+.dice__face--front .dice__pip:first-child,
+.dice__face--top .dice__pip:first-child {
+  background: radial-gradient(circle at 34% 30%, #FFB3A8, #FF6B5B 75%);
+}
+
+/* Ombre portée : elle reste au sol et se resserre quand le dé est en l'air. */
+.dice-slot__shadow {
+  width: 54px; height: 9px; border-radius: 50%;
+  background: rgba(79, 70, 229, .22); filter: blur(5px);
+  animation: dice-shadow var(--roll) linear both;
+}
+.dice-slot__shadow--b { width: 46px; }
+.dice-stage__caption {
+  margin: 0; font-size: .88rem; font-weight: 600; color: var(--text-soft);
+}
+.dice-stage__caption b { color: var(--primary); }
+
+/* --- Déplacement horizontal : lancé depuis la gauche, freiné par la table --- */
+@keyframes dice-throw {
+  0%   { transform: translateX(var(--from)); }
+  100% { transform: translateX(0); }
+}
+@keyframes dice-throw-b {
+  0%   { transform: translateX(var(--from-b)); }
+  100% { transform: translateX(0); }
+}
+
+/* --- Dé 1 : rotation qui ralentit + trois rebonds amortis ---
+   Les paliers de rotation (300 → 150 → 120 → 70 → 38 → 18 → 7 → 2 → 1)
+   créent le freinage ; les chutes sont en ease-in, les rebonds en ease-out. */
+@keyframes dice-spin {
+  0%   { transform: translateY(-52px) rotateX(0)      rotateY(0)      rotateZ(0);      animation-timing-function: ease-in; }
+  20%  { transform: translateY(0)     rotateX(300deg) rotateY(330deg) rotateZ(150deg); animation-timing-function: ease-out; }
+  32%  { transform: translateY(-30px) rotateX(450deg) rotateY(490deg) rotateZ(220deg); animation-timing-function: ease-in; }
+  46%  { transform: translateY(0)     rotateX(570deg) rotateY(610deg) rotateZ(280deg); animation-timing-function: ease-out; }
+  58%  { transform: translateY(-14px) rotateX(640deg) rotateY(680deg) rotateZ(318deg); animation-timing-function: ease-in; }
+  70%  { transform: translateY(0)     rotateX(678deg) rotateY(712deg) rotateZ(340deg); animation-timing-function: ease-out; }
+  80%  { transform: translateY(-5px)  rotateX(696deg) rotateY(728deg) rotateZ(352deg); animation-timing-function: ease-in; }
+  88%  { transform: translateY(0)     rotateX(703deg) rotateY(734deg) rotateZ(357deg); }
+  94%  { transform: translateY(-1px)  rotateX(705deg) rotateY(735deg) rotateZ(359deg); }
+  /* Immobilisation : 706° = 2 tours − 14°, l'assiette finale du dé posé. */
+  100% { transform: translateY(0)     rotateX(706deg) rotateY(736deg) rotateZ(360deg); }
+}
+
+/* --- Dé 2 : mêmes principes, sens inverse et rebonds décalés --- */
+@keyframes dice-spin-b {
+  0%   { transform: translateY(-44px) rotateX(0)       rotateY(0)       rotateZ(0);       animation-timing-function: ease-in; }
+  18%  { transform: translateY(0)     rotateX(-280deg) rotateY(-320deg) rotateZ(-130deg); animation-timing-function: ease-out; }
+  30%  { transform: translateY(-34px) rotateX(-430deg) rotateY(-480deg) rotateZ(-200deg); animation-timing-function: ease-in; }
+  44%  { transform: translateY(0)     rotateX(-560deg) rotateY(-610deg) rotateZ(-270deg); animation-timing-function: ease-out; }
+  56%  { transform: translateY(-17px) rotateX(-635deg) rotateY(-680deg) rotateZ(-310deg); animation-timing-function: ease-in; }
+  68%  { transform: translateY(0)     rotateX(-678deg) rotateY(-712deg) rotateZ(-336deg); animation-timing-function: ease-out; }
+  78%  { transform: translateY(-7px)  rotateX(-697deg) rotateY(-728deg) rotateZ(-350deg); animation-timing-function: ease-in; }
+  87%  { transform: translateY(0)     rotateX(-706deg) rotateY(-735deg) rotateZ(-357deg); }
+  94%  { transform: translateY(-2px)  rotateX(-709deg) rotateY(-737deg) rotateZ(-359deg); }
+  100% { transform: translateY(0)     rotateX(-710deg) rotateY(-738deg) rotateZ(-360deg); }
+}
+
+/* --- Ombre : large au contact, resserrée quand le dé est en l'air --- */
+@keyframes dice-shadow {
+  0%   { transform: scale(.38); opacity: .05; }
+  20%  { transform: scale(1);   opacity: .26; }
+  32%  { transform: scale(.6);  opacity: .11; }
+  46%  { transform: scale(1);   opacity: .26; }
+  58%  { transform: scale(.78); opacity: .16; }
+  70%  { transform: scale(1);   opacity: .26; }
+  80%  { transform: scale(.9);  opacity: .2; }
+  100% { transform: scale(1);   opacity: .24; }
+}
+
+/* Variante sans animation : les dés sont posés, nets et lisibles. */
+@media (prefers-reduced-motion: reduce) {
+  .dice-slot, .dice-slot__shadow { animation: none; }
+  .dice    { animation: none; transform: rotateX(-14deg) rotateY(16deg); }
+  .dice--b { animation: none; transform: rotateX(10deg)  rotateY(-18deg); }
+}
+
+/* Petits écrans : les dés partent de moins loin pour rester dans le cadre. */
+@media (max-width: 520px) {
+  .dice-stage { --from: -130px; --from-b: -165px; }
+  .dice-stage__board { gap: 16px; height: 112px; }
+}
+
+/* Résultat du tirage */
+.draw-result { margin-top: 1.25rem; animation: pop var(--t) both; }
+@keyframes pop { from { opacity: 0; transform: scale(.96) translateY(8px); } to { opacity: 1; transform: none; } }
+.draw-result__inner {
+  display: grid; grid-template-columns: 220px 1fr; gap: clamp(1rem, 2.5vw, 1.8rem);
+  align-items: start;
+}
+.draw-result__cover { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); aspect-ratio: 3 / 4; }
+.draw-result__eyebrow {
+  font-size: .76rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--accent);
+}
+.draw-result__actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.2rem; }
+
+/* ---------- 7. Filtres ---------- */
+.filters__group { margin-bottom: 1.1rem; }
+.filters__group:last-child { margin-bottom: 0; }
+.filters__legend {
+  display: block; margin-bottom: .45rem;
+  font-size: .78rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--text-faint);
+}
+.filters__count { font-size: .88rem; color: var(--text-soft); }
+.filters__count b { color: var(--primary); }
+.filters__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.1rem 1.6rem; }
+
+/* ---------- 8. Grille de la bibliothèque ---------- */
+.library__toolbar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1.1rem;
+}
+.library__search { flex: 1 1 260px; position: relative; }
+.library__search input { padding-left: 2.3rem; }
+.library__search svg {
+  position: absolute; left: .7rem; top: 50%; transform: translateY(-50%);
+  width: 18px; height: 18px; fill: var(--text-faint); pointer-events: none;
+}
+
+.game-grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(.9rem, 2vw, 1.35rem);
+}
+
+.game-card {
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow-sm);
+  color: inherit; text-align: left;
+  transition: transform var(--t), box-shadow var(--t), border-color var(--t);
+}
+.game-card:hover, .game-card:focus-visible {
+  transform: translateY(-4px); box-shadow: var(--shadow-lg);
+  border-color: #D4D3F7; text-decoration: none;
+}
+.game-card__media { position: relative; aspect-ratio: 4 / 3; background: var(--surface-2); }
+.game-card__media img { width: 100%; height: 100%; object-fit: cover; }
+.game-card__fav {
+  position: absolute; top: .55rem; right: .55rem;
+  width: 30px; height: 30px; display: grid; place-items: center;
+  border-radius: 50%; background: rgba(255, 255, 255, .92); box-shadow: var(--shadow-sm);
+}
+.game-card__fav svg { width: 17px; height: 17px; fill: var(--accent); }
+.game-card__body { padding: .85rem .95rem 1rem; display: flex; flex-direction: column; gap: .55rem; flex: 1; }
+.game-card__title { margin: 0; font-size: 1.02rem; font-weight: 700; }
+.game-card__meta { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: auto; }
+
+/* Couverture de remplacement (jeu sans image) */
+.cover-fallback {
+  width: 100%; height: 100%; display: grid; place-items: center;
+  font-size: 1.9rem; font-weight: 800; color: rgba(255, 255, 255, .95);
+  letter-spacing: .02em; text-shadow: 0 1px 2px rgba(0, 0, 0, .18);
+}
+
+/* ---------- 9. Fiche jeu ---------- */
+.detail { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: clamp(1rem, 3vw, 2rem); }
+.detail__cover { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); aspect-ratio: 4 / 3; }
+.detail__badges { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+.detail__facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: .8rem; margin: 1.2rem 0; }
+.detail__fact { background: var(--surface-2); border-radius: var(--radius-sm); padding: .7rem .85rem; }
+.detail__fact span { display: block; font-size: .74rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--text-faint); }
+.detail__fact b { font-size: 1.05rem; }
+.detail__actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.4rem; }
+.detail__note {
+  background: var(--primary-soft); border-left: 3px solid var(--primary);
+  border-radius: var(--radius-sm); padding: .85rem 1rem; color: #2E2A6B; white-space: pre-wrap;
+}
+
+/* ---------- 10. États vides, toasts, modale ---------- */
+.empty {
+  text-align: center; padding: clamp(1.8rem, 5vw, 3rem) 1.2rem;
+  border: 1.5px dashed var(--border); border-radius: var(--radius-lg); background: var(--surface);
+}
+.empty svg { width: 46px; height: 46px; fill: var(--text-faint); margin-bottom: .6rem; }
+.empty h3 { margin-bottom: .3rem; }
+.empty p { color: var(--text-soft); max-width: 46ch; margin-inline: auto; }
+.empty__actions { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; margin-top: 1.2rem; }
+
+.toast-zone {
+  position: fixed; z-index: 60; left: 50%; transform: translateX(-50%);
+  bottom: calc(var(--tabbar-h) + 1rem);
+  display: flex; flex-direction: column; gap: .5rem; width: min(92vw, 420px);
+}
+.toast {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .75rem 1rem; border-radius: var(--radius);
+  background: #171A2B; color: #fff; font-size: .9rem; font-weight: 500;
+  box-shadow: var(--shadow-lg); animation: slide-up var(--t) both;
+}
+.toast--success { background: #0E7C54; }
+.toast--error { background: #B3243F; }
+@keyframes slide-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+.modal {
+  position: fixed; inset: 0; z-index: 70;
+  display: grid; place-items: center; padding: 1.2rem;
+  background: rgba(23, 26, 43, .5); backdrop-filter: blur(2px);
+}
+.modal__box {
+  width: min(94vw, 420px); background: var(--surface);
+  border-radius: var(--radius-lg); padding: 1.4rem; box-shadow: var(--shadow-lg);
+  animation: pop var(--t) both;
+}
+.modal__actions { display: flex; justify-content: flex-end; gap: .6rem; margin-top: 1.3rem; }
+
+/* Barre d'occupation du stockage */
+.meter { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.meter__fill { height: 100%; background: var(--primary); border-radius: 999px; transition: width var(--t); }
+.meter__fill--warn { background: #E8A33D; }
+.meter__fill--full { background: var(--danger); }
+
+/* Aperçu de la couverture dans le formulaire */
+.cover-preview {
+  width: 160px; aspect-ratio: 4 / 3; border-radius: var(--radius-sm); overflow: hidden;
+  border: 1px solid var(--border); background: var(--surface-2); flex: none;
+}
+.cover-editor { display: flex; gap: 1rem; align-items: flex-start; flex-wrap: wrap; }
+.cover-editor__fields { flex: 1 1 240px; min-width: 0; }
+
+.page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+.page-head p { margin: 0; color: var(--text-soft); }
+.back-link { display: inline-flex; align-items: center; gap: .3rem; font-size: .88rem; font-weight: 600; color: var(--text-soft); margin-bottom: .6rem; }
+.back-link:hover { color: var(--primary); text-decoration: none; }
+
+.settings-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap; padding: .9rem 0; border-bottom: 1px solid var(--border);
+}
+.settings-row:last-child { border-bottom: 0; }
+.settings-row__text { flex: 1 1 260px; }
+.settings-row__text b { display: block; font-size: .96rem; }
+.settings-row__text span { font-size: .85rem; color: var(--text-soft); }
+
+/* ---------- 11. Responsive ---------- */
+@media (max-width: 900px) {
+  .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .detail { grid-template-columns: 1fr; }
+  .draw-result__inner { grid-template-columns: 160px 1fr; }
+}
+
+@media (max-width: 720px) {
+  .nav { display: none; }
+  .tabbar { display: flex; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  .game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; }
+  .game-card__body { padding: .65rem .7rem .8rem; }
+  .game-card__title { font-size: .92rem; }
+  .draw-result__inner { grid-template-columns: 1fr; }
+  .draw-result__cover { max-width: 220px; }
+  .btn-draw { width: 100%; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
